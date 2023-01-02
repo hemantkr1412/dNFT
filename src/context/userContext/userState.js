@@ -13,6 +13,8 @@ const UserState = (props) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userAccount, setUserAccount] = useState("");
   const [isToken, setIsToken] = useState(false);
+  const [status,setStatus]= useState(false);
+  const [admin,setAdmin] = useState(false)
 
  
 
@@ -23,6 +25,9 @@ const UserState = (props) => {
         .then((res) => {
           setUserAccount(res);
           setIsConnected(true);
+          if(userAccount==="0xcebFD12bA1e85a797BFdf62081785E9103A96Dd3"){
+            setAdmin(true)
+          }
         })
         .catch((err) => {
           setIsConnected(false);
@@ -66,6 +71,10 @@ const UserState = (props) => {
         userAccount,
         isToken,
         setIsToken,
+        status,
+        setStatus,
+        admin,
+        setAdmin
       }}
     >
       {props.children}
