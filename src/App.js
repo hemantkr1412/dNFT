@@ -11,6 +11,8 @@ import UserState from './context/userContext/userState';
 import { useContext } from "react";
 import UserContext from './context/userContext/UserContext';
 import { NFTCard } from './NFTCard';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -25,7 +27,7 @@ function App() {
     <UserState>
       <Navbar />
       <NFTCard />
-
+      <ToastContainer />
     </UserState>
       </>
   );

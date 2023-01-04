@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from '@mui/material'
+import { Button, Card, InputLabel, Typography } from '@mui/material'
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { useContext } from 'react';
@@ -6,7 +6,21 @@ import UserContext from './context/userContext/UserContext';
 import walletLogo from "./wallet.png"
 import NFTImage from "./NFTImage.png";
 import NFTCardScript from './Scripts/NFTCardScript';
-import Loading from "./Loading.gif"
+import Loading from "./Loading.gif";
+import data from './data.json';
+import axio from "axios";
+import {create as IPFSHTTPClient,globSource} from 'ipfs-http-client';
+import {Buffer} from 'buffer';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+// const Moralis = require('moralis').default;
+// const { EvmChain } = require('@moralisweb3/common-evm-utils');
+import GenrateURI from "./APIs/GenrateURI";
+import {TailSpin} from "react-loader-spinner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import data2 from "./data.json"
 
 
 
@@ -17,6 +31,25 @@ export const NFTCard = () => {
     const [editId,setEditId] = useState("")
     const [memberShip,setMembership]=useState("PREMIUM")
     const [discount,setDiscount]=useState(30)
+    const [loading, setLoading] = React.useState(false);
+
+    const projectId = "2Jlv5EBQnZrIkyfYxgQ85PYuUo6";
+    const projectSecret = "89e836478d0c9351b7e6b68a0d898d99";
+    const auth = 'Basic ' + Buffer.from(projectId + ":" + projectSecret).toString('base64')
+
+    const client = IPFSHTTPClient({
+        host:'ipfs.infura.io',
+        port:5001,
+        protocol: 'https',
+        headers: {
+            authorization: auth
+          }
+      });
+
+    // const client = IPFSHTTPClient("https://ipfs.infura.io:5001/api/v0")
+    const [uri,setUri] = useState("")
+
+
 
     const [isDisable,setisDisable]=useState(true)
     const [inputStyle,setInputStyle]=useState({
@@ -25,25 +58,84 @@ export const NFTCard = () => {
         borderBottom:"1px dashed"
     })
     const [btn,setBtn] = useState("Edit")
+    const [inputDiscount,setInputDiscount] = useState("")
     const disableInputStyle ={color:"black",backgroundColor:inputStyle.background,border:inputStyle.border,fontSize:"1rem",width:"100px",borderBottom:inputStyle.borderBottom}
     const disableInputDisscountStyle ={color:"black",backgroundColor:inputStyle.background,border:inputStyle.border,fontSize:"1rem",width:"50px",borderBottom:inputStyle.borderBottom}
-    const handleClick=(id,btn) =>{
+    
+    const handleClick= async(id,btn,image,tokenId) =>{
         if(btn==="edit"){
             setEditId(id)
         }else{
-            setEditId("")
+
+            try{
+                setLoading(true)
+                // GenrateURI(memberShip,inputDiscount,image).then((res)=>{
+                //     if(res===400){
+                //         setLoading(false)
+                //         setEditId("") 
+                //         toast.error("Updation Faild") 
+                //     }else{
+                //     console.log(res[0])
+                //     setLoading(false)
+                //     setEditId("")
+                //     toast.success("Successfully Update")
+                //     }
+                // })
+
+                var obj ={
+                    attributes: [
+                      {
+                        color: "Dark Blue II",
+                        memberShip,
+                        discount
+                      }
+                    ],
+                    description: `This is for ${memberShip} users`,
+                    image: image,
+                    name: "ABC HOTEL"
+                  }
+                  obj = JSON.stringify(obj)
+                
+                    const added = await client.add(obj);
+                    setUri(added.path)
+                    console.log(added.path)
+                    setLoading(false)
+                    setEditId("")
+                    toast.success("Successfully Update")
+                    
+
+            }catch (error){
+                toast.warn("Updation Faild")
+            }
+             
         }
+        
+ }
+
+    const handleChange = (e)=>{
+        setMembership(e.target.value)
         
     }
 
-    const handleChange = (e,inpt)=>{
-        if(inpt==="member"){
-            setMembership(e.target.value)
-        }else{
-            setDiscount(e.target.value)
-        }
-        
+
+ 
+    // const handleAPI = async() =>{
+    //         console.log("Clicked")
+    //         try {
+    //             const added = await client.add(walletLogo);
+    //             setUri(added.path)
+    //             console.log(added.path)
+                
+    //           } catch (error) {
+    //             console.log(error)
+    //           }
+    // }
+
+
+    const handleChangeDisscount = (e) =>{
+        setInputDiscount(e.target.value)
     }
+   
     
 
   return (
@@ -62,7 +154,7 @@ export const NFTCard = () => {
                         return (
                             <>
 
-                            <Card sx={{ width:"25%",height:"60vh",background:"white",boxShadow:"10px 5px 5px #85878c",margin:"20px",minWidth:"350px",padding:"10px"}}>
+                            <Card key={index} sx={{ width:"25%",height:"60vh",background:"white",boxShadow:"10px 5px 5px #85878c",margin:"20px",minWidth:"350px",padding:"10px"}}>
                                 <Box sx={{display:{xs:'block',md:"flex"},justifyContent:"space-around",margin:"auto",marginTop:"50px"}}>
                                     <Box>
                                         <img src={NFT.media[0].gateway} width={300} height={300}/>
@@ -104,14 +196,33 @@ export const NFTCard = () => {
                                                 </Button>
                                             </Box> */}
                                             <Box sx={{marginTop:"50px"}}>
-                                                <Typography>MEMBERSHIP : </Typography>
+                                                <Typography color={"green"} sx={{fontWeight:"600"}}>MEMBERSHIP : </Typography>
                                                 {editId !==index && <Typography>{NFT.metadata.attributes[0].value.slice(0,7) ?NFT.metadata.attributes[0].value.slice(0,7):memberShip}</Typography>}
-                                                {editId===index && <input style={disableInputStyle} type="text" value={NFT.metadata.attributes[0].value.slice(0,7) ?NFT.metadata.attributes[0].value.slice(0,7):memberShip} onChange={(e)=> handleChange(e,"member")}  class="details-dialog"  />}
+                                                {/* {editId===index && <input style={disableInputStyle} type="text" value={NFT.metadata.attributes[0].value.slice(0,7) ?NFT.metadata.attributes[0].value.slice(0,7):memberShip} onChange={(e)=> handleChange(e,"member")}  class="details-dialog"  />} */}
+                                                {editId===index &&
+                                                    
+                                                    <FormControl sx={{mt:2 ,minWidth: 120 }} size="small">
+                                                        <InputLabel id="demo-select-small">MEMBERSHIP</InputLabel>
+                                                        <Select
+
+                                                            labelId="demo-simple-select-standard-label"
+                                                            id="demo-simple-select-standard"
+                                                            value={memberShip}
+                                                            onChange={handleChange}
+                                                            label="MEMBERSHIP"
+                                                            >
+                                                            <MenuItem value={"PREMIUM"}>PREMIUM</MenuItem>
+                                                            <MenuItem value={"REGULAR"}>REGULAR</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                    
+                                                }
                                                 {/* <Typography mt={5} >DISCOUNT : 50% </Typography> */}
-                                                <Typography sx={{display:"flex",marginTop:"10px"}}>DISCOUNT :</Typography>
+                                                <Typography sx={{display:"flex",marginTop:"10px",color:"green",fontWeight:"600"}}>DISCOUNT :</Typography>
                                                 <Box sx={{display:"flex"}}>
                                                     {editId !==index && <Typography>{NFT.metadata.attributes[0].discount?NFT.metadata.attributes[0].discount:discount}</Typography>}
-                                                    {editId===index && <input style={disableInputDisscountStyle} type="text" value={NFT.metadata.attributes[0].discount?NFT.metadata.attributes[0].discount:discount} class="details-dialog" onChange={(e)=> handleChange(e,"discount")}  />}
+                                                    {/* {editId===index && <input style={disableInputDisscountStyle} type="text" value={NFT.metadata.attributes[0].discount?NFT.metadata.attributes[0].discount:discount} class="details-dialog" onChange={(e)=> handleChange(e,"discount")}  />} */}
+                                                    {editId===index && <input style={disableInputDisscountStyle} type="text" value={inputDiscount} class="details-dialog" onChange={handleChangeDisscount}  />}
                                                     <Typography>% OFF*</Typography>
                                                 </Box>
                                             </Box>
@@ -119,11 +230,22 @@ export const NFTCard = () => {
                                             {editId !==index && <Button variant="outlined" onClick={()=>handleClick(index,"edit")}>
                                                     Edit
                                                 </Button>}
-                                                {editId===index && <Button variant="outlined"
-                                                onClick={()=>handleClick(index,"save")}  
+                                                
+                                                {editId===index &&<> {loading ? <TailSpin color='#A3A6FA' height={30}/> :
+                                                <> {editId===index && <Button variant="outlined"
+                                                onClick={()=>
+                                                    handleClick(index,"save",NFT.media[0].gateway,NFT.id.tokenId)}  
                                                 >
                                                     Save
                                                 </Button>}
+                                                </>
+                                                }</>}
+                                                
+                                                {/* {editId===index && <Button variant="outlined"
+                                                onClick={()=>handleClick(index,"save")}  
+                                                >
+                                                    Save
+                                                </Button>} */}                                              
 
                                             </Box>}
                                     </Box>

@@ -21,6 +21,7 @@ export const FetchNFTs = async (owner, contractAddress, setNFTs, retryAttempt) =
         }
 
         setNFTs(data.ownedNfts)
+        // console.log(data.ownedNfts)
         return data
     }
 }
