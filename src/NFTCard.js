@@ -21,6 +21,10 @@ import {TailSpin} from "react-loader-spinner";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import data2 from "./data.json"
+import {contractAddress, abi} from "./common.js";
+// import { extractEventHandlers } from '@mui/base';
+import {ethers} from 'ethers';
+
 
 
 
@@ -63,16 +67,19 @@ export const NFTCard = () => {
     const disableInputDisscountStyle ={color:"black",backgroundColor:inputStyle.background,border:inputStyle.border,fontSize:"1rem",width:"50px",borderBottom:inputStyle.borderBottom}
     
     const handleClick= async(id,btn,image,tokenId) =>{
+        const provider =new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, abi, signer);
         if(btn==="edit"){
             setEditId(id)
         }else{
-
+            
             try{
                 setLoading(true)
                 // GenrateURI(memberShip,inputDiscount,image).then((res)=>{
-                //     if(res===400){
-                //         setLoading(false)
-                //         setEditId("") 
+                    //     if(res===400){
+                        //         setLoading(false)
+                        //         setEditId("") 
                 //         toast.error("Updation Faild") 
                 //     }else{
                 //     console.log(res[0])
@@ -87,18 +94,31 @@ export const NFTCard = () => {
                       {
                         color: "Dark Blue II",
                         memberShip,
-                        discount
+                        inputDiscount
                       }
                     ],
                     description: `This is for ${memberShip} users`,
-                    image: image,
+                    image: "https://ipfs.io/ipfs/QmV2NaqzSgqgurypqm4UQYkRDLy6g8FMmvVoUkVdAhheN1",
                     name: "ABC HOTEL"
                   }
                   obj = JSON.stringify(obj)
                 
                     const added = await client.add(obj);
-                    setUri(added.path)
-                    console.log(added.path)
+                    const jsonURI ="https://bit.infura-ipfs.io/ipfs/"+ added.path;
+                   await setUri(jsonURI);
+                    console.log(jsonURI);
+                    //Ethers code
+                    const changeUserNFT = await contract.changeUserNFT(tokenId,uri);
+                    console.log(changeUserNFT.data);    
+                    
+                    // const owner = await contract.owner();
+                    // console.log(owner);
+
+
+
+
+
+
                     setLoading(false)
                     setEditId("")
                     toast.success("Successfully Update")
@@ -254,7 +274,7 @@ export const NFTCard = () => {
                                     <Typography >TOKEN ID :</Typography>
                                     <Typography sx={{fontSize:"0.7rem"}} >{NFT.id.tokenId }</Typography>
                                     <Typography sx={{marginTop:"10px"}} variant='h6'>
-                                        OWENER:
+                                        Owner:
                                     </Typography>
                                     <Typography sx={{fontSize:"0.7rem"}}>
                                         {user.userAccount}
