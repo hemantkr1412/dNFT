@@ -25,7 +25,7 @@ const UserState = (props) => {
         .then((res) => {
           setUserAccount(res);
           setIsConnected(true);
-          if(userAccount==="0xcebFD12bA1e85a797BFdf62081785E9103A96Dd3"){
+          if(userAccount==="0xcebFD12bA1e85a797BFdf62081785E9103A96Dd3" || "0xCb2006BFFef96d9EaD1C81163BB64bCf5209a383"){
             setAdmin(true)
           }
         })
