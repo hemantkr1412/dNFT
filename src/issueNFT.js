@@ -28,7 +28,6 @@ function IssueNFT() {
   },
   "attributes":[
     {
-        "tokenId":"0",
         "owner":"0xcdsf.....",
         "rewardDetails":{
           "reward":"2 Night Stay",
@@ -47,17 +46,17 @@ function IssueNFT() {
       // "https://gateway.pinata.cloud/ipfs/QmYnnjkVv2i39bGM334r3eqnHGzMw4cTUsDQDA14kHs5Gd",
       // "NFT issued, with Reward",true);
 
-      const issue = await contract.safeMint(
-        walletAddress,
-        uri,
-        message,
-        reward
-      );
-      console.warn(issue);//Safe Mint function will be called from contract...
+    //   const issue = await contract.safeMint(
+    //     walletAddress,
+    //     uri,
+    //     message,
+    //     reward
+    //   );
+    //   console.warn(issue);//Safe Mint function will be called from contract...
 
       const currentBlock = await provider.getBlockNumber();//return current block number
       const allLogs = await contract.queryFilter("MintLog", 0, currentBlock);
-      console.warn(allLogs); //All the txn logs since deployment
+      console.warn(currentBlock); //All the txn logs since deployment
 
 /*##################### Txn log for specific user ################################ */
 
@@ -74,12 +73,21 @@ function IssueNFT() {
       console.warn(`${error}`);
     }
   };
-
+  const currentUser = async()=>{
+    const ownerSel = document.querySelector("#ownerAddress");
+    const owner = await contract.owner();
+    ownerSel.innerHTML = `Owner Address:${owner}`;
+    console.log(owner);
+  }
   return (
     <>
       <button type="button" class="btn btn-primary" onClick={issueNFT}>
         Filter
       </button>
+      <button type="button" class="btn btn-primary" onClick={currentUser}>
+        Current Owner
+      </button>
+      <div id = "ownerAddress">Owner Address:0</div>
     </>
   );
 }
