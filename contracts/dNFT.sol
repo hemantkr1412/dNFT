@@ -6,14 +6,14 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract MyToken is ERC721, ERC721URIStorage, Ownable {
+contract BIT_TOKEN is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     
     Counters.Counter private _tokenIdCounter;
       struct UserInfo{
           bool isUser;
           bool isRewarded;
-          bool isRedeemed; 
+         bool isRedeemed;  
           uint256 tokenId;
           string tokenURI;
       }
