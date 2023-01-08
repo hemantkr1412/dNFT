@@ -5,14 +5,26 @@ import { Button, TextField, Typography } from '@mui/material';
 import { useContext } from 'react';
 import UserContext from './context/userContext/UserContext';
 import NFTCardScript from './Scripts/NFTCardScript';
-
+import {ethers} from 'ethers';
+import {contractAddress, abi} from './common.js';
+// import {uri} from './NFTCard.js';
 
 export const InputField = () => {
   const user = useContext(UserContext);
   const { NFTs,handleGetDnftBywallet} = NFTCardScript();
   const [wallet,setWallet] = useState("")
-  const handleChange = (e)=>{
-    setWallet(e.target.value)
+  const [uri,setURI] = useState("");
+  const mintNFT = async()=>{
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+  try {
+    const mint = await contract.safeMint(wallet,uri);
+    console.log(mint);
+  } catch (error) {
+    console.log(`Error occured ${error}`);
+  }
+
   }
 
   
@@ -34,13 +46,10 @@ export const InputField = () => {
         <Toolbar>
           
             <Box margin={'auto'} marginBottom ='auto' style={{display:"flex"}} >
-                <TextField label="Token" variant="standard" sx={{borderRadius: 10,}}  />
+                <TextField label="Wallet Address" variant="standard" sx={{borderRadius: 10,}}  />
                 <Button type='submit' variant="contained" sx={{borderRadius: 10,}}
-                onClick={()=>{
-                  user.setIsToken(true)
-                }}
-                >Get dNFT</Button>
-            
+                onClick={mintNFT}
+                >Issue NFT</Button>
             </Box>  
         </Toolbar>
     </AppBar>

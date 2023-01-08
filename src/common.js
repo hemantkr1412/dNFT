@@ -1,5 +1,5 @@
-export const contractAddress = "0x972e88b57116E2dC4aB9E67eE0993add41920683";
-export const abi = [
+export const contractAddress = "0xE234Fc7Ad220889D55F068Fad424c2847C7aD583";//GANACHE CHAIN
+export const abi =[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -84,12 +84,70 @@ export const abi = [
 				"internalType": "string",
 				"name": "newURI",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_msg",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isRewarded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isRedeemed",
+				"type": "bool"
 			}
 		],
 		"name": "changeUserNFT",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "_nftURI",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isRewarded",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "isRedeemed",
+				"type": "bool"
+			}
+		],
+		"name": "MintLog",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -128,6 +186,16 @@ export const abi = [
 				"internalType": "string",
 				"name": "newUri",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isRewarded",
+				"type": "bool"
 			}
 		],
 		"name": "safeMint",
@@ -263,6 +331,45 @@ export const abi = [
 		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "addressToUser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "isUser",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isRewarded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isRedeemed",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenURI",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
