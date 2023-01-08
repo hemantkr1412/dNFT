@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract BIT_TOKEN is ERC721, ERC721URIStorage, Ownable {
+contract MyToken is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     
     Counters.Counter private _tokenIdCounter;
@@ -18,17 +18,16 @@ contract BIT_TOKEN is ERC721, ERC721URIStorage, Ownable {
           string tokenURI;
       }
     mapping(address=>UserInfo) public addressToUser;
-    constructor() ERC721("BIT_TOKEN", "BIT") {}
-
-    event MintLog(address indexed _from,address indexed _to, string indexed _nftURI, string message, bool isRewarded, bool isRedeemed);
-
+    constructor() ERC721("MyToken", "MTK") {}
+    event MintLog(address indexed _from,address indexed _to, string indexed _nftURI,uint _tokenId ,string message, bool isRewarded, bool isRedeemed);
+    // event UpdateLog(address indexed _from,address indexed _to, string indexed _nftURI,string message,bool isRewarded, bool isRedeemed);
     function safeMint(address to, string memory newUri, string memory message, bool _isRewarded) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId,newUri);
         addressToUser[to] = UserInfo(true,_isRewarded,false,tokenId,newUri);
-        emit MintLog(msg.sender, to, newUri,message,_isRewarded,false);
+        emit MintLog(msg.sender, to, newUri,tokenId,message,_isRewarded,false);
     }
     
     // The following functions are overrides required by Solidity.
@@ -49,7 +48,7 @@ contract BIT_TOKEN is ERC721, ERC721URIStorage, Ownable {
     function changeUserNFT(uint _tokenId,string memory newURI,string memory _msg,bool _isRewarded,bool _isRedeemed) public onlyOwner{
     _setTokenURI(_tokenId,newURI);
     addressToUser[_ownerOf(_tokenId)] = UserInfo(true,_isRewarded,_isRedeemed,_tokenId,newURI);
-    emit MintLog(msg.sender,_ownerOf(_tokenId),newURI,_msg,_isRewarded,_isRedeemed);
+    emit MintLog(msg.sender,_ownerOf(_tokenId),newURI,_tokenId,_msg,_isRewarded,_isRedeemed);
     }
 
 }

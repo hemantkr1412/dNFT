@@ -1,10 +1,21 @@
 {
-  "attributes": [
-    { "color": "Dark Blue II", 
-    "memberShip": "Regular",
-     "inputDiscount": "0" }
-  ],
-  "description": "This is for PREMIUM users",
-  "image": "https://gateway.pinata.cloud/ipfs/QmXghhU7SRN8N7rbEfJ6FjXXLn6nQqBeX8GxLuB2zSg9vn",
-  "name": "ABC HOTEL"
+  "properties": {
+      "name": "ABC HOTEL",
+      "description": {
+          "type": "string",
+          "description": "NFT issued to authentic member of ABC Hotel"
+      },
+      "image": "https://gateway.pinata.cloud/ipfs/QmRUheYjxM4TkBNyVaDcmod554QtXSUBm1yoNAz3c1pPJ3"
+  },
+  "attributes":[
+    {
+        "tokenId":"0",
+        "owner":"0xcdsf.....",
+        "rewardDetails":{
+          "reward":"2 Night Stay",
+          "data":"01/01/2023"
+        },
+        "redeemStatus":"Unclaimed"
+    }
+]
 }
