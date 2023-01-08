@@ -13,7 +13,9 @@ import UserContext from './context/userContext/UserContext';
 import { NFTCard } from './NFTCard';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import IssueNFT from './issueNFT';
+import ViewNFT from './viewNFT';
+import TransferOwner from './transferOwnership';
 
 
 function App() {
@@ -24,6 +26,9 @@ function App() {
   };
   return (
     <>
+    <TransferOwner></TransferOwner>
+    <ViewNFT></ViewNFT>
+    <IssueNFT></IssueNFT>
     <UserState>
       <Navbar />
       <NFTCard />

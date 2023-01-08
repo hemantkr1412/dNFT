@@ -11,9 +11,9 @@ export const FetchNFTs = async (owner, contractAddress, setNFTs, retryAttempt) =
         let data;
         try {
             if (contractAddress) {
-                data = await fetch(`${endpoint}/getNFTs?owner=${"0xcebFD12bA1e85a797BFdf62081785E9103A96Dd3"}&contractAddresses%5B%5D=${"0x972e88b57116E2dC4aB9E67eE0993add41920683"}`).then(data => data.json())
+                data = await fetch(`${endpoint}/getNFTs?owner=${owner}&contractAddresses%5B%5D=${contractAddress}`).then(data => data.json())
             } else {
-                data = await fetch(`${endpoint}/getNFTs?owner=${"0xcebFD12bA1e85a797BFdf62081785E9103A96Dd3"}`).then(data => data.json())
+                data = await fetch(`${endpoint}/getNFTs?owner=${owner}`).then(data => data.json())
             }
         } catch (e) {
             // FetchNFTs(endpoint, owner, contractAddress, setNFTs, retryAttempt+1)

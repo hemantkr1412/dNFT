@@ -92,7 +92,6 @@ export const NFTCard = () => {
                 var obj ={
                     attributes: [
                       {
-                        color: "Dark Blue II",
                         memberShip,
                         inputDiscount
                       }
@@ -105,11 +104,11 @@ export const NFTCard = () => {
                 
                     const added = await client.add(obj);
                     const jsonURI ="https://bit.infura-ipfs.io/ipfs/"+ added.path;
-                   await setUri(jsonURI);
+                    setUri(jsonURI);
                     console.log(jsonURI);
                     //Ethers code
                     const changeUserNFT = await contract.changeUserNFT(tokenId,uri);
-                    console.log(changeUserNFT.data);    
+                    console.log(changeUserNFT);    
                     
                     // const owner = await contract.owner();
                     // console.log(owner);
@@ -170,7 +169,7 @@ export const NFTCard = () => {
                 {user.status ? 
                 (
                     (NFTs) ? NFTs.map((NFT,index) => {
-                            
+                            // console.log(NFT);
                         return (
                             <>
 
@@ -217,7 +216,10 @@ export const NFTCard = () => {
                                             </Box> */}
                                             <Box sx={{marginTop:"50px"}}>
                                                 <Typography color={"green"} sx={{fontWeight:"600"}}>MEMBERSHIP : </Typography>
-                                                {editId !==index && <Typography>{NFT.metadata.attributes[0].value.slice(0,7) ?NFT.metadata.attributes[0].value.slice(0,7):memberShip}</Typography>}
+                                                {editId !==index &&
+                                                <Typography>{NFT.metadata.attributes[0].memberShip ?NFT.metadata.attributes[0].memberShip:memberShip}</Typography>
+                                                
+                                                }
                                                 {/* {editId===index && <input style={disableInputStyle} type="text" value={NFT.metadata.attributes[0].value.slice(0,7) ?NFT.metadata.attributes[0].value.slice(0,7):memberShip} onChange={(e)=> handleChange(e,"member")}  class="details-dialog"  />} */}
                                                 {editId===index &&
                                                     
@@ -240,7 +242,7 @@ export const NFTCard = () => {
                                                 {/* <Typography mt={5} >DISCOUNT : 50% </Typography> */}
                                                 <Typography sx={{display:"flex",marginTop:"10px",color:"green",fontWeight:"600"}}>DISCOUNT :</Typography>
                                                 <Box sx={{display:"flex"}}>
-                                                    {editId !==index && <Typography>{NFT.metadata.attributes[0].discount?NFT.metadata.attributes[0].discount:discount}</Typography>}
+                                                    {editId !==index && <Typography>{NFT.metadata.attributes[0].inputDiscount?NFT.metadata.attributes[0].inputDiscount:inputDiscount}</Typography>}
                                                     {/* {editId===index && <input style={disableInputDisscountStyle} type="text" value={NFT.metadata.attributes[0].discount?NFT.metadata.attributes[0].discount:discount} class="details-dialog" onChange={(e)=> handleChange(e,"discount")}  />} */}
                                                     {editId===index && <input style={disableInputDisscountStyle} type="text" value={inputDiscount} class="details-dialog" onChange={handleChangeDisscount}  />}
                                                     <Typography>% OFF*</Typography>
