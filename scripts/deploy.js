@@ -10,7 +10,7 @@ async function main() {
   // console.log(`Txn Hash is ${contractDep.hash});
 }
 
-//contract address : 0xd0727f1fbA2633207e4c80F3E559d3575F6C6EF4...MUMBAI
+//contract address : 0x43dfA7e4F98134b0720cA158f5f4bC00732D4d6c...MUMBAI
 
 main().then(process.exitCode = 0)
 .catch((error) => {
